@@ -1,0 +1,214 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 04-abr-2017, 18:33:16
+    Author     : Desarrollador
+*/
+
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+a, a > * {
+    cursor: pointer;
+    outline: medium none;
+    text-decoration: none;
+}
+
+body {
+    text-align: center;
+    color: #282828;
+}
+
+table {
+    width: 100%;
+    border: 1px solid #000;
+    border-collapse: separate;
+    border-spacing: 0px;
+}
+th, td {
+
+    text-align: left;
+    vertical-align: top;
+    border: 1px solid #000; 
+    border-spacing: 0;
+    border-collapse: collapse;
+    padding: 0.3em;
+    caption-side: bottom;
+}
+table th {
+    text-align: center;
+}
+
+/*h1{
+    font: bold 30px verdana, sans-serif;
+}
+h2 {
+    font: bold 20px verdana, sans-serif;
+}*/
+
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+    display: block;
+}
+
+.cabecera {
+    background: #00b6dc;
+    border: 1px solid #00b6dc;
+    padding: 20px;
+}
+.header{
+    height:120px;
+}
+.header #headerlogo{
+    padding: 15px;
+}
+.header #headertopmenu{
+    padding: 15px;
+    float: right;
+    margin-top:25px;
+}
+.menu{
+    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
+    padding: 5px 5px;
+}
+.menu ul {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.menu li {
+    display: inline-block;
+    list-style: none;
+    padding: 5px;
+    font: bold 14px verdana, sans-serif;
+    text-transform: uppercase;
+    color: #f7f7f7;
+}
+.menu li > a {
+    background: #68c3a3;
+    padding: 5px 7px;
+    outline: 0 none;
+    color: #f7f7f7;
+}
+
+.menu li a:hover {
+    color: #68c3a3;
+    background: #f7f7f7;
+    padding: 5px 7px;
+    text-decoration: none;
+}
+
+.menu li.active > a {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    outline: 0 none;
+}
+
+.breadcrumb-line{
+    margin:0;
+    position:relative
+}
+
+.breadcrumb {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border:1px solid #e5e5e5;
+}
+
+.breadcrumb-top{
+    margin:0 -25px;
+    border:0;
+    border-bottom:1px solid #e5e5e5;
+    border-top:1px solid transparent
+}
+.breadcrumb-top .breadcrumb{
+    padding-left:25px;
+    padding-top:9px
+}
+
+.clear{
+    clear: both;
+}
+
+.container-producto {
+    border: 1px solid #e5e5e5;
+    padding: 10px;
+    text-align: justify;
+    color: #000;
+    margin-top: 10px;
+}
+
+.panel-title {
+    display: block;
+    float: left;
+    font-size: 12px;
+    padding: 11px 12px 12px;
+}
+.panel-title {
+    color: inherit;
+    font-size: 16px;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+.pull-right {
+    float: right;
+}
+
+.view-product {
+    height:400px; 
+    border: 1px solid #ccc;
+    padding: 10px; 
+}
+.view-product > img {
+    height: auto;
+    max-width: 100%;
+}
+.view-product > .name {
+    font: bold 12px verdana, sans-serif;
+}
+
+.view-product > .description, .presentation {
+    font: 10px verdana, sans-serif;
+}
+
+.view-product > .code {
+    font: 10px verdana, sans-serif;
+}
+.view-product > .code > span {
+    font: bold 11px verdana, sans-serif;
+    color: lightseagreen;
+}
+
+.pie {
+    clear: both;
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+    border-top: 1px solid #747477;
+    background: #747477 none repeat scroll 0 0;
+    color: #fff;
+}
+
+article {
+    /*background: #FFFBCC;
+    border: 1px solid #999999;*/
+    padding: 20px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+article footer {
+    text-align: right;
+}
+
+time {
+    color: #999999;
+}
+
+figcaption {
+    font: italic 14px verdana, sans-serif;
+}

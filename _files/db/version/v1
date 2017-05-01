@@ -1,0 +1,185 @@
+/************ Update: Tables ***************/
+
+/******************** Add Table: catalog ************************/
+
+/* Build Table Structure */
+CREATE TABLE catalog
+(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	id_catalog_type INTEGER NOT NULL,
+	name VARCHAR(150) NOT NULL,
+	code VARCHAR(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* Add Indexes */
+CREATE INDEX catalog_code_Idx ON catalog (code) USING BTREE;
+
+CREATE UNIQUE INDEX catalog_id_Idx ON catalog (id) USING BTREE;
+
+CREATE INDEX catalog_id_catalog_type_Idx ON catalog (id_catalog_type) USING BTREE;
+
+CREATE INDEX catalog_name_Idx ON catalog (name) USING BTREE;
+
+
+/******************** Add Table: catalog_type ************************/
+
+/* Build Table Structure */
+CREATE TABLE catalog_type
+(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	name VARCHAR(150) NOT NULL,
+	code VARCHAR(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* Add Indexes */
+CREATE UNIQUE INDEX catalog_type_code_Idx ON catalog_type (code) USING BTREE;
+
+CREATE UNIQUE INDEX catalog_type_id_Idx ON catalog_type (id) USING BTREE;
+
+CREATE UNIQUE INDEX catalog_type_name_Idx ON catalog_type (name) USING BTREE;
+
+
+/******************** Add Table: product ************************/
+
+/* Build Table Structure */
+CREATE TABLE product
+(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	id_product_type INTEGER NOT NULL,
+	id_catalog INTEGER NOT NULL,
+	name VARCHAR(250) NOT NULL,
+	description VARCHAR(500) NULL,
+	presentation VARCHAR(100) NULL,
+	code VARCHAR(150) NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* Add Indexes */
+CREATE UNIQUE INDEX product_code_Idx ON product (code) USING BTREE;
+
+CREATE UNIQUE INDEX product_id_Idx ON product (id) USING BTREE;
+
+CREATE INDEX product_id_catalog_Idx ON product (id_catalog) USING BTREE;
+
+CREATE INDEX product_id_product_type_Idx ON product (id_product_type) USING BTREE;
+
+CREATE INDEX product_name_Idx ON product (name) USING BTREE;
+
+
+/******************** Add Table: product_type ************************/
+
+/* Build Table Structure */
+CREATE TABLE product_type
+(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	name VARCHAR(150) NOT NULL,
+	description VARCHAR(250) NULL,
+	isActive SMALLINT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* Add Indexes */
+CREATE UNIQUE INDEX product_type_id_Idx ON product_type (id) USING BTREE;
+
+CREATE UNIQUE INDEX product_type_name_Idx ON product_type (name) USING BTREE;
+
+
+
+
+
+/************ Add Foreign Keys ***************/
+
+/* Add Foreign Key: fk_catalog_catalog_type */
+ALTER TABLE catalog ADD CONSTRAINT fk_catalog_catalog_type
+	FOREIGN KEY (id_catalog_type) REFERENCES catalog_type (id)
+	ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+/* Add Foreign Key: fk_product_catalog */
+ALTER TABLE product ADD CONSTRAINT fk_product_catalog
+	FOREIGN KEY (id_catalog) REFERENCES catalog (id)
+	ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+/* Add Foreign Key: fk_product_product_type */
+ALTER TABLE product ADD CONSTRAINT fk_product_product_type
+	FOREIGN KEY (id_product_type) REFERENCES product_type (id)
+	ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+
+/************ Update: Tables ***************/
+
+/******************** Update Table: product ************************/
+
+ALTER TABLE product ADD url_picture VARCHAR(250) NULL after code;
+
+/************ Remove Foreign Keys ***************/
+
+ALTER TABLE product DROP FOREIGN KEY fk_product_catalog;
+
+ALTER TABLE product DROP FOREIGN KEY fk_product_product_type;
+
+
+
+/************ Update: Tables ***************/
+
+/******************** Rebuild Table: product ************************
+Reasons:
+Column: id_product_type
+	Server column is in a foreign key.
+	Server Column: id_product_type, DT=Integer, L=, COM=, N=false, AN=false, DF=, SC=, SI=true, EN=, ARR=false.
+	Design Column: id_product_type, DT=Integer, L=, COM=, N=true, AN=false, DF=, SC=, SI=true, EN=, ARR=false.
+Column: id_catalog
+	Server column is in a foreign key.
+	Server Column: id_catalog, DT=Integer, L=, COM=, N=false, AN=false, DF=, SC=, SI=true, EN=, ARR=false.
+	Design Column: id_catalog, DT=Integer, L=, COM=, N=true, AN=false, DF=, SC=, SI=true, EN=, ARR=false.
+*****************************************************************************/
+
+/* Rename: product */
+ALTER TABLE product RENAME TO product_old;
+
+/* Build Table Structure */
+CREATE TABLE product
+(
+	id INTEGER AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	id_product_type INTEGER NULL,
+	id_catalog INTEGER NULL,
+	name VARCHAR(250) NOT NULL,
+	description VARCHAR(500) NULL,
+	presentation VARCHAR(100) NULL,
+	code VARCHAR(150) NULL,
+	url_picture VARCHAR(250) NULL
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+/* Repopulate Table Data */
+INSERT INTO product
+	 (id, id_product_type, id_catalog, name, description, presentation, code, url_picture)
+SELECT id, id_product_type, id_catalog, name, description, presentation, code, url_picture
+FROM product_old
+ORDER BY id;
+
+/* Remove Temp Table */
+DROP TABLE product_old;
+
+/* Add Indexes */
+CREATE UNIQUE INDEX product_code_Idx ON product (code) USING BTREE;
+
+CREATE UNIQUE INDEX product_id_Idx ON product (id) USING BTREE;
+
+CREATE INDEX product_id_catalog_Idx ON product (id_catalog) USING BTREE;
+
+CREATE INDEX product_id_product_type_Idx ON product (id_product_type) USING BTREE;
+
+CREATE INDEX product_name_Idx ON product (name) USING BTREE;
+
+
+
+
+
+/************ Add Foreign Keys ***************/
+
+/* Add Foreign Key: fk_product_catalog */
+ALTER TABLE product ADD CONSTRAINT fk_product_catalog
+	FOREIGN KEY (id_catalog) REFERENCES catalog (id)
+	ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+/* Add Foreign Key: fk_product_product_type */
+ALTER TABLE product ADD CONSTRAINT fk_product_product_type
+	FOREIGN KEY (id_product_type) REFERENCES product_type (id)
+	ON UPDATE NO ACTION ON DELETE NO ACTION;
