@@ -3,7 +3,6 @@
  * @autor Ivette Mateo Washbrum, Katherine Gallegos Carrillo, Yessenia Vargas Matute, Carlos Luis Rodriguez Nieto
  * @date 01-may-2017
  * @time 22:26:12
- * @link http://luis-rodriguez-ec.herokuapp.com/site/index
  */
 
 require_once '../../system.php';
@@ -12,9 +11,13 @@ require_once BASECLASS . 'catalogo_tipo.php';
 require_once BASECLASS . 'producto.php';
 require_once BASECLASS . 'producto_tipo.php';
 
-$mProducto = new mProducto();
-$filterProducto = new filterProducto();
-$mProducto->filter($filterProducto, $eProductos/* REF */, $eProductoTipos/* REF */);
+$mCatalogo = new mCatalogo();
+$filterCatalogo = new filterCatalogo();
+$filterCatalogo->id_catalog_type = 1;
+$mCatalogo->filter($filterCatalogo, $eCatalogos/* REF */);
+
+$mProducto_Tipo = new mProducto_Tipo();
+$mProducto_Tipo->filter($eProductoTipos);
 //echo phpversion();
 ?>
 
@@ -26,7 +29,7 @@ and open the template in the editor.
 -->
 <html lang="es">
     <head>
-        <title>LABFARVE::Guía</title>
+        <title>LABFARVE::Agregar Producto</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="author" content="Carlos Rodriguez">
@@ -45,7 +48,7 @@ and open the template in the editor.
         <!-- Latest compiled and minified JavaScript -->
         <script type="text/javascript" src="../../resources/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-        <script type="text/javascript" src="../js/administrar_productos.js"></script>
+        <script type="text/javascript" src="../js/agregar_producto.js"></script>
 
     </head>
     <body>
@@ -95,12 +98,21 @@ and open the template in the editor.
                                 <h4>Listado de Productos</h4>
                             </div>
                             <div class="panel-body">
-                                <form class="form-horizontal">
+                                <form enctype="multipart/form-data" class="form-horizontal" name="frmProducto">
+                                    <input type="hidden" name="accion" value="agregar">
                                     <div class="form-group">
                                         <label for="comboTipoProducto" class="col-sm-2 control-label">Tipo de Producto</label>
                                         <div class="col-sm-10">
                                             <select class="form-control" name="cboTipoProducto">
-                                                <option value="1">KMLKM</option>
+                                                <option value="0" selected="selected">S/N Tipo Producto</option>
+                                                <?php
+                                                /* @var $eProductoTipo eProductoTipo */
+                                                foreach ($eProductoTipos as $eProductoTipo) {
+                                                    ?>
+                                                    <option value="<?php echo $eProductoTipo->id ?>"><?php echo $eProductoTipo->name ?></option>
+                                                    <?php
+                                                }
+                                                ?>
                                             </select>
                                         </div>
                                     </div>
@@ -108,14 +120,16 @@ and open the template in the editor.
                                         <label for="comboCategoria" class="col-sm-2 control-label">Categoria</label>
                                         <div class="col-sm-10">
                                             <select class="form-control" name="cboCategoria">
-                                                <option value="1">KMLKM</option>
+                                                <option value="0" selected="selected">S/N Categoria</option>
+                                                <?php
+                                                /* @var $eCatalogo eCatalogo */
+                                                foreach ($eCatalogos as $eCatalogo) {
+                                                    ?>
+                                                    <option value="<?php echo $eCatalogo->id ?>"><?php echo $eCatalogo->name ?></option>
+                                                    <?php
+                                                }
+                                                ?>
                                             </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inputNombre" class="col-sm-2 control-label">Nombre</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="txtNombre" placeholder="Nombre">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -133,13 +147,19 @@ and open the template in the editor.
                                     <div class="form-group">
                                         <label for="inputPresentación" class="col-sm-2 control-label">Presentación</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="txtPresentación" placeholder="Presentación">
+                                            <input type="text" class="form-control" name="txtPresentacion" placeholder="Presentación">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="inputCodigo" class="col-sm-2 control-label">Codigo</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" name="txtCodigo" placeholder="Codigo">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputImagen" class="col-sm-2 control-label">Imagen</label>
+                                        <div class="col-sm-10">
+                                            <input type="file" class="form-control" name="fileImagem">
                                         </div>
                                     </div>
                                     <div class="form-group">

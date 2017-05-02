@@ -166,35 +166,14 @@ class MY_Model extends Conexion
     }
     
     /* 
-     * función: insert
-     * @param $arrData Array 
+     * función: save
+     * @param $sql String 
      * Descripción, permite insertar un registro a la base de datos
      */
-    function insert( $arrData )
+    function _save( $sql )
     {
-        $db =& $this->getConnection();
-        $arrData['modified'] = NULL;
-        if( $db->insert($this->table, $arrData) === FALSE )
+        if(mysql_query($sql) === FALSE)
         {
-            Helper_Log::write( $this->messageError(__FUNCTION__,FALSE), Helper_Log::LOG_DB);
-            throw new Exception( $this->messageError(__FUNCTION__, TRUE) );
-        }
-    }
-    
-    /* 
-     * función: update
-     * @param $arrData Array 
-     * @param $value String 
-     * @param $by String 
-     * Descripción, permite actualizar un registro a la base de datos
-     */
-    function update( $arrData, $value, $by='id' )
-    {
-        $db = $this->getConnection();
-        unset( $arrData['created'] );
-        if( $db->update($this->table, $arrData, array($by=>$value)) === FALSE )
-        {
-            Helper_Log::write( $this->messageError(__FUNCTION__,FALSE), Helper_Log::LOG_DB);
             throw new Exception( $this->messageError(__FUNCTION__, TRUE) );
         }
     }
@@ -242,4 +221,15 @@ class MY_Model extends Conexion
     {
         parent::rollback();
     }
+    
+    function messageError( $function, $isHTML = TRUE )
+    {
+        $msg = "".
+            "CLASS: ".( __CLASS__ ).( $isHTML?'<br/>':"\n" ).
+            "FUNCTION: $function".( $isHTML?'<br/>':"\n" ).
+            "ERROR MESSAGE: ".mysql_error($this->conect).( $isHTML?'<br/>':"\n" );
+        
+        return $msg;
+    }
+    
 }
