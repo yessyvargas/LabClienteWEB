@@ -36,20 +36,28 @@ class mProducto extends MY_Model
         $eProductoTipos = array();
         
         $select_producto = $this->buildSelectFields('p_', 'p', $this->table);
-        $select_producto_type = $this->buildSelectFields('pt_', 'pt', 'product_type');
-        $select = ($select_producto.','.$select_producto_type);
+        $select_producto_type = (is_null($filter->id_product_type)) ? NULL :$this->buildSelectFields('pt_', 'pt', 'product_type');
+        if (is_null($filter->id_product_type))
+        {
+            $select = $select_producto;
+        }
+        else
+        {
+            $select = ($select_producto.','.$select_producto_type);
+        }
+        
         $sql = "SELECT
                     ".($select)."
                 FROM ".( $this->table )." AS p
-                    INNER JOIN product_type AS pt ON pt.id = p.id_product_type
-                    INNER JOIN catalog AS c ON c.id = p.id_catalog
+                    ".(is_null($filter->id_product_type) ? "":" INNER JOIN product_type AS pt ON pt.id = p.id_product_type ")."
+                    ".(is_null($filter->id_catalog) ? "":" INNER JOIN catalog AS c ON c.id = p.id_catalog ")."
                 WHERE
                     1=1
                 " .( is_null($filter->id_product_type) ? "":" AND p.id_product_type = $filter->id_product_type "). "
                 " .( is_null($filter->id_catalog) ? "":" AND p.id_catalog = $filter->id_catalog "). "
                 " .( is_null($filter->limit) || is_null($filter->offset) ? '' : " LIMIT ".( $filter->limit )." OFFSET ".( $filter->offset )." " ) . "
                 ";
-
+        // print_r($sql);
         $queryR = mysql_query($sql);
         
         while ($row = mysql_fetch_assoc($queryR))  
