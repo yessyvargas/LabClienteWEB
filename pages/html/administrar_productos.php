@@ -3,6 +3,7 @@
  * @autor Ivette Mateo Washbrum, Katherine Gallegos Carrillo, Yessenia Vargas Matute, Carlos Luis Rodriguez Nieto
  * @date 01-may-2017
  * @time 7:20:10
+ * Objetivo: Página para visualizar información principal de los productos naturales
  */
 
 require_once '../../system.php';
@@ -44,8 +45,8 @@ and open the template in the editor.
         <!-- Latest compiled and minified JavaScript -->
         <script type="text/javascript" src="../../resources/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-        <script type="text/javascript" src="../js/administrar_productos.js"></script>
-
+	    <!-- Se hace referencia a los javascript para administrar y eliminar productos -->
+        <script type="text/javascript" src="../js/administrar_productos.js"></script>		
     </head>
     <body>
         <header class="cabecera">
@@ -110,17 +111,19 @@ and open the template in the editor.
                                         <tbody>
                                             <?php
                                             /* @var $eProducto eProducto  */
+											/* Por cada producto se carga la información de id, código, nombre, presentación y los botones editar y eliminar*/
                                             foreach ($eProductos as $eProducto) {
                                                 ?>
                                                 <tr>
                                                     <td class="text-center"><?php echo $eProducto->id ?></td>
                                                     <td class="text-center"><?php echo $eProducto->code ?></td>
-                                                    <td class="text-center"><?php echo $eProducto->name ?></td>
+                                                    <td class="text-center"><?php echo $eProducto->name ?></td> 
                                                     <td class="text-center"><?php echo $eProducto->presentation ?></td>
                                                     <td class="text-center">
-                                                        <a type="button" class="btn btn-default" href="editar_producto.php"><span class="glyphicon glyphicon-edit"></span></a> 
-                                                        <a type="button" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span></a> 
-                                                    </td>
+                                                        <a type="button" class="btn btn-default" href="editar_producto.php?id=<?php echo $eProducto->id?>"><span class="glyphicon glyphicon-edit"></span></a> 									
+                                                        <a type="button" class="btn btn-default action-eliminar" id = "<?php echo $eProducto->id;?>"><span class="glyphicon glyphicon-trash"></span></a> 
+													</a>	
+													</td>
                                                 </tr>
                                                 <?php
                                             }
@@ -128,10 +131,7 @@ and open the template in the editor.
                                         </tbody>
                                     </table>
                                 </div>
-
-
-
-                            </div>
+							</div>
                         </div>
                     </div>
                 </div>
