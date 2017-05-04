@@ -4,6 +4,7 @@
  * @autor Ivette Mateo Washbrum, Katherine Gallegos Carrillo, Yessenia Vargas Matute, Carlos Luis Rodriguez Nieto
  * @date 30-abr-2017
  * @time 17:44:20
+ * Objetivo: Clase Producto, contiene atributos y metodos de los Productos
  */
 
 include_once("MY_Model.php");
@@ -26,33 +27,51 @@ class mProducto extends MY_Model
         $eProducto = new eProducto();
         $eProducto->parseRow($row);
         
-        return $eProducto;
+        return $eProducto; //me retorna una entidad 
     }
     
     function genId() 
     {
         return parent::genId();
     }
-            
-    function save(eProducto &$eProducto)
+			
+	function insertar(eProducto &$eProducto)
     {
         try
         {
-            if (empty($eProducto->id)) 
-            {
-                $eProducto->id = $this->genId();
+		        $eProducto->id = $this->genId();
                 $this->_save($this->_insert($eProducto->toData()));
-            }
-            else
-            {
-                $this->_save($this->_update($eProducto->toData(TRUE), array('id'=>$eProducto->id)));
-            }
         }
         catch (Exception $ex)
         {
             throw new Exception($ex->getMessage());
         }
     }
+			
+    function save(eProducto &$eProducto)
+    {
+        try
+        {   
+				$this->_save($this->_update($eProducto->toData(TRUE), $eProducto->id));
+        }
+        catch (Exception $ex)
+        {
+            throw new Exception($ex->getMessage());
+        }
+    }
+	
+	function delete($id)
+	{
+		try
+		{
+		//	$this->_delete($id);
+			$this->_save($this->_delete($id));
+		}
+		catch (Exception $ex)
+		{
+			throw new Exception($ex->getMessage());
+		}
+	}
     
     /* 
      * función: _insert
@@ -78,16 +97,51 @@ class mProducto extends MY_Model
         return "INSERT INTO ".$this->table." (".implode(", ", $keys).") VALUES (".implode(', ', $values).")";
     }
     
-    /* 
+    /*
      * función: _update
      * @param $arrData Array 
      * @param $value String 
      * @param $by String 
      * Descripción, permite actualizar un registro a la base de datos
      */
-    function _update( $values, $where)
+	 
+    function _update( $values, $id)
     {
+		//print_r($where);
+		unset($values['id']);
         foreach ($values as $key => $val)
+        {
+            if($key == 'name' || $key == 'description' || $key == 'presentation' || $key == 'code' || $key == 'url_picture')
+            {
+                //$val = "\"".($val)."\"";
+				$valstr[] = sprintf('%s = "%s"', $key, $val);
+            }
+			else
+			{
+				 $valstr[] = sprintf('%s = %s', $key, $val);
+			}
+            
+           
+        }
+
+        $sql = "UPDATE ".$this->table." SET ".implode(', ', $valstr);
+
+        $sql .= " WHERE id = ".$id;
+		print_r($sql);
+        return $sql;
+    }
+	
+    /* 
+     * función: _update
+     * @param $arrData Array 
+     * @param $value String 
+     * @param $by String 
+     * Descripción, permite eliminar un registro a la base de datos
+     */
+	 //array('id' =>1)
+    function _delete( $id)//values seria los nombres de los campos y $where un array donde el key seria campo y el value el valor
+    {
+      /*foreach ($where as $key => $val)
         {
             if($key == 'name' || $key == 'description' || $key == 'presentation' || $key == 'code' || $key == 'url_picture')
             {
@@ -95,12 +149,10 @@ class mProducto extends MY_Model
             }
             
             $valstr[] = sprintf('"%s" = %s', $key, $val);
-        }
+        }*/
 
-        $sql = "UPDATE ".$this->table." SET ".implode(', ', $valstr);
-
-        $sql .= ($where != '' AND count($where) >=1) ? " WHERE ".implode(" ", $where) : '';
-
+        $sql = "DELETE FROM ".$this->table." WHERE id = ".$id;
+		//print_r($sql);
         return $sql;
     }
 

@@ -178,22 +178,6 @@ class MY_Model extends Conexion
         }
     }
     
-    /* 
-     * función: delete
-     * @param $value String 
-     * @param $by String 
-     * Descripción, permite eliminar un registro a la base de datos
-     */
-    function delete( $value, $by='id' )
-    {
-        $db = $this->getConnection();
-        
-        if( $db->delete($this->table, array($by=>$value)) === FALSE )
-        {
-            Helper_Log::write( $this->messageError(__FUNCTION__,FALSE), Helper_Log::LOG_DB);
-            throw new Exception( $this->messageError(__FUNCTION__, TRUE) );
-        }
-    }
     
     /* 
      * función: begin
